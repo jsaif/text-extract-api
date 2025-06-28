@@ -12,7 +12,7 @@ from text_extract_api.files.file_formats.image import ImageFileFormat
 class EasyOCRStrategy(Strategy):
     @classmethod
     def name(cls) -> str:
-        return "easyOCR"
+        return "easyocr"
 
     def extract_text(self, file_format: FileFormat, language: str = 'en') -> ExtractResult:
         """

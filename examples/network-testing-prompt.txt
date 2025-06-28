@@ -1,0 +1,27 @@
+Extract the following network testing information from this document:
+
+**Network Configuration:**
+- IP addresses and subnets
+- Network devices (routers, switches, firewalls)
+- VLAN configurations
+- Network topology details
+
+**Test Results:**
+- Bandwidth measurements
+- Latency/ping results  
+- Packet loss statistics
+- Throughput data
+- Performance metrics
+
+**Issues Found:**
+- Network bottlenecks
+- Connectivity problems
+- Performance issues
+- Security vulnerabilities
+
+**Recommendations:**
+- Suggested improvements
+- Configuration changes
+- Hardware upgrades
+
+Format the output as structured markdown with clear sections and preserve all numerical data exactly as shown.

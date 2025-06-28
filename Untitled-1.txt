@@ -1,0 +1,2 @@
+# Start Docker Desktop first, then run:
+docker run -d --name redis-text-extract -p 6379:6379 --restart always redis

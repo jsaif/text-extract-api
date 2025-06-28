@@ -9,6 +9,10 @@ import redis
 from celery.result import AsyncResult
 from fastapi import FastAPI, Form, UploadFile, File, HTTPException
 from pydantic import BaseModel, Field, field_validator
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv(".env.localhost")
 
 from text_extract_api.celery_app import app as celery_app
 from text_extract_api.extract.strategies.strategy import Strategy
@@ -30,7 +34,7 @@ def storage_profile_exists(profile_name: str) -> bool:
 
 app = FastAPI()
 # Connect to Redis
-redis_url = os.getenv('REDIS_CACHE_URL', 'redis://redis:6379/1')
+redis_url = os.getenv('REDIS_CACHE_URL', 'redis://localhost:6379/1')
 redis_client = redis.StrictRedis.from_url(redis_url)
 
 @app.post("/ocr")
@@ -131,6 +135,8 @@ class OcrFormRequest(BaseModel):
 
     @field_validator('strategy')
     def validate_strategy(cls, v):
+        # Strip whitespace from strategy name
+        v = v.strip() if v else v
         Strategy.get_strategy(v)
         return v
 

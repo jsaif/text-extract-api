@@ -50,6 +50,8 @@ class Strategy:
         Raises:
             ValueError: If the specified strategy name does not exist among the registered strategies.
         """
+        # Normalize strategy name to lowercase
+        name = name.lower().strip()
 
         if name not in cls._strategies:
             cls.load_strategies_from_config()
@@ -64,10 +66,24 @@ class Strategy:
         return cls._strategies[name]
 
     @classmethod
-    def register_strategy(cls, strategy: Type["Strategy"], name: str = None, override: bool = False):
-        name = name or strategy.name()
-        if override or name not in cls._strategies:
-            cls._strategies[name] = strategy
+    def register_strategy(cls, strategy, name: str = None, override: bool = False):
+        # Handle both strategy instances and strategy classes
+        if isinstance(strategy, type):
+            # It's a class
+            strategy_name = name or strategy.name()
+            strategy_instance = strategy()
+        else:
+            # It's already an instance
+            strategy_instance = strategy
+            strategy_name = name or strategy_instance.name()
+        
+        # Normalize strategy name to lowercase to avoid duplicates
+        strategy_name = strategy_name.lower()
+            
+        if override or strategy_name not in cls._strategies:
+            cls._strategies[strategy_name] = strategy_instance
+        else:
+            print(f"Strategy '{strategy_name}' already registered, skipping duplicate")
 
     @classmethod
     def load_strategies_from_config(cls, path: str = os.getenv('OCR_CONFIG_PATH', 'config/strategies.yaml')):
@@ -96,8 +112,10 @@ class Strategy:
             strategy_instance = strategy()
             strategy_instance.set_strategy_config(strategy_config)
             
-            cls.register_strategy(strategy_instance, strategy_name)
-            print(f"Loaded strategy from {config_file_path} {strategy_name} [{strategy_class_path}]")
+            # Normalize strategy name to lowercase
+            normalized_name = strategy_name.lower()
+            cls.register_strategy(strategy_instance, normalized_name)
+            print(f"Loaded strategy from {config_file_path} {normalized_name} [{strategy_class_path}]")
 
         return strategies
 
@@ -130,10 +148,18 @@ class Strategy:
                     if (isinstance(attr, type)
                             and issubclass(attr, Strategy)
                             and attr is not Strategy
-                            and attr.name() not in strategies
                     ):
-                        strategies[attr.name()] = attr()
-                        print(f"Discovered strategy {attr.name()} from {submodule_info.name} [{module_info.name}]")
+                        # Get the strategy name using the classmethod
+                        try:
+                            strategy_name = attr.name().lower()  # Normalize to lowercase
+                            if strategy_name not in strategies:
+                                strategies[strategy_name] = attr()
+                                print(f"Discovered strategy {strategy_name} from {submodule_info.name} [{module_info.name}]")
+                            else:
+                                print(f"Strategy {strategy_name} already discovered, skipping duplicate")
+                        except Exception as e:
+                            print(f"Error getting name for strategy {attr_name}: {e}")
+                            continue
 
 
         cls._strategies = strategies
