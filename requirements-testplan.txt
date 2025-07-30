@@ -1,0 +1,2 @@
+# Additional requirements for test plan conversion functionality
+jsonschema>=4.0.0    # For JSON schema validation

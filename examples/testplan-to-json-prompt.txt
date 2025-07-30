@@ -1,0 +1,117 @@
+Below is the text from a test plan document after OCR. Fix any text and spelling issues.
+
+Convert the text to JSON format according to the Extended Test Plan Schema. Extract all available information including:
+
+1. Document metadata (title, version, document ID, dates, author)
+2. Table of contents if present
+3. All sections with their numbers, titles, and content
+4. Test cases with complete details (ID, title, objective, procedure, verifications, expected results, platforms)
+5. Any tables, configuration snippets, or CLI outputs
+6. Hardware/software information
+7. Scale details and requirements
+8. Execution lists or test matrices
+
+Follow this Extended Test Plan JSON Schema structure:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Extended Comprehensive Test Plan Schema",
+  "type": "object",
+  "description": "Schema for validating extended comprehensive test plan documents.",
+  "required": [
+    "document_title",
+    "version", 
+    "generated_on",
+    "sections"
+  ],
+  "properties": {
+    "document_id": {
+      "type": "string",
+      "description": "Unique identifier for the test plan document (e.g., TPI-134163)."
+    },
+    "document_title": {
+      "type": "string",
+      "description": "Title of the test plan document."
+    },
+    "version": {
+      "type": "string", 
+      "description": "Version of the test plan document."
+    },
+    "generated_on": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when the test plan document was generated."
+    },
+    "last_updated_by": {
+      "type": "string",
+      "description": "Person who last updated the document (e.g., email address)."
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time", 
+      "description": "Timestamp of last update in ISO format."
+    },
+    "sections": {
+      "type": "array",
+      "description": "Sections of the test plan document.",
+      "items": {
+        "type": "object",
+        "required": ["section_number", "section_title"],
+        "properties": {
+          "section_number": {"type": "string"},
+          "section_title": {"type": "string"},
+          "content": {"type": "string"},
+          "bullets": {"type": "array", "items": {"type": "string"}},
+          "testcases": {
+            "type": "array",
+            "items": {
+              "type": "object", 
+              "required": ["testcase_id", "title"],
+              "properties": {
+                "testcase_id": {"type": "string"},
+                "title": {"type": "string"},
+                "test_objective": {"type": "string"},
+                "test_setup": {"type": "string"},
+                "test_nodes": {"type": "array", "items": {"type": "string"}},
+                "test_procedure": {"type": "array", "items": {"type": "string"}},
+                "verifications": {"type": "array", "items": {"type": "string"}},
+                "expected_results": {"type": "array", "items": {"type": "string"}},
+                "platforms": {"type": "array", "items": {"type": "string"}},
+                "source_of_requirement": {"type": "string"}
+              }
+            }
+          },
+          "subsections": {"$ref": "#/properties/sections"}
+        }
+      }
+    },
+    "execution_list": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "testcase": {"type": "string"},
+          "platform": {"type": "string"},
+          "status": {"type": "string"}
+        }
+      }
+    }
+  }
+}
+```
+
+Important instructions:
+- Extract ALL test cases with their complete details
+- Preserve the hierarchical section structure (sections and subsections)
+- Include any tables as structured data in the "tables" property
+- Extract configuration snippets and CLI outputs where present
+- Maintain the original section numbering (1, 2, 8.1, 8.1-1, etc.)
+- For test cases, ensure testcase_id follows the format from the document (e.g., "Tc8.1-1", "8.1-2")
+- Include platform information (e.g., "MX304", "MX-304-VC-CAR")
+- Extract bullet points and list items into the "bullets" array
+- If execution matrices or test result tables are present, include them in "execution_list"
+
+Return ONLY the JSON object following this schema structure.
+
+Input text:

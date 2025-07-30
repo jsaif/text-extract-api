@@ -1,0 +1,440 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Extended Comprehensive Test Plan Schema",
+  "type": "object",
+  "description": "Schema for validating extended comprehensive test plan documents.",
+  "required": [
+    "document_title",
+    "version",
+    "generated_on",
+    "sections"
+  ],
+  "properties": {
+    "document_id": {
+      "type": "string",
+      "description": "Unique identifier for the test plan document (e.g., TPI-134163)."
+    },
+    "document_title": {
+      "type": "string",
+      "description": "Title of the test plan document."
+    },
+    "version": {
+      "type": "string",
+      "description": "Version of the test plan document."
+    },
+    "generated_on": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when the test plan document was generated."
+    },
+    "last_updated_by": {
+      "type": "string",
+      "description": "Person who last updated the document (e.g., email address)."
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of last update in ISO format."
+    },
+    "table_of_contents": {
+      "type": "array",
+      "description": "Table of contents of the test plan document.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of the section in the table of contents."
+          },
+          "page": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Page number where the section starts."
+          },
+          "linked_section": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ID of the linked section."
+          }
+        }
+      }
+    },
+    "execution_list": {
+      "type": "array",
+      "description": "List of test case executions and their status.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "testcase": {
+            "type": "string",
+            "description": "Test case identifier (e.g., 8.1-1)."
+          },
+          "platform": {
+            "type": "string",
+            "description": "Platform where the test case is executed (e.g., MX-304-VC-CAR)."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "in_progress", "passed", "failed", "skipped"],
+            "description": "Execution status of the test case."
+          },
+          "execution_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date when the test case was executed."
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes about the execution."
+          }
+        },
+        "required": ["testcase", "platform"]
+      }
+    },
+    "sections": {
+      "type": "array",
+      "description": "Sections of the test plan document.",
+      "items": {
+        "type": "object",
+        "required": [
+          "section_number",
+          "section_title"
+        ],
+        "properties": {
+          "section_number": {
+            "type": "string",
+            "description": "Number of the section."
+          },
+          "section_title": {
+            "type": "string",
+            "description": "Title of the section."
+          },
+          "section_type": {
+            "type": "string",
+            "enum": [
+              "textual",
+              "table",
+              "testcase_group",
+              "topology",
+              "config_block",
+              "toc",
+              "image",
+              "misc"
+            ],
+            "description": "Type of the section."
+          },
+          "page_number": {
+            "type": [
+              "integer",
+              "string",
+              "null"
+            ],
+            "description": "Page number where the section starts."
+          },
+          "raw_text_block": {
+            "type": "string",
+            "description": "Raw text content of the section."
+          },
+          "content": {
+            "type": "string",
+            "description": "Main content of the section."
+          },
+          "bullets": {
+            "type": "array",
+            "description": "Bullet points or list items in the section.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "related_sections": {
+            "type": "array",
+            "description": "IDs of related sections.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subsections": {
+            "$ref": "#/properties/sections",
+            "description": "Subsections of the section."
+          },
+          "testcases": {
+            "type": "array",
+            "description": "Test cases within the section.",
+            "items": {
+              "type": "object",
+              "required": [
+                "testcase_id",
+                "title"
+              ],
+              "properties": {
+                "testcase_id": {
+                  "type": "string",
+                  "description": "ID of the test case."
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of the test case."
+                },
+                "synopsis": {
+                  "type": "string",
+                  "description": "Brief summary of the test case."
+                },
+                "duration": {
+                  "type": "string",
+                  "description": "Estimated duration of the test case."
+                },
+                "description": {
+                  "type": "array",
+                  "description": "Detailed description of the test case.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "test_setup": {
+                  "type": "string",
+                  "description": "Setup required for the test case."
+                },
+                "test_nodes": {
+                  "type": "array",
+                  "description": "Nodes involved in the test case.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "test_objective": {
+                  "type": "string",
+                  "description": "Objective of the test case."
+                },
+                "test_procedure": {
+                  "type": "array",
+                  "description": "Procedure to execute the test case.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "verifications": {
+                  "type": "array",
+                  "description": "Verification steps for the test case.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "expected_results": {
+                  "type": "array",
+                  "description": "Expected results of the test case.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "actual_results": {
+                  "type": "string",
+                  "description": "Actual results of the test case."
+                },
+                "deviation_notes": {
+                  "type": "string",
+                  "description": "Notes on any deviations observed during the test case."
+                },
+                "pass_fail": {
+                  "type": "string",
+                  "description": "Pass/Fail status of the test case."
+                },
+                "result": {
+                  "type": "string",
+                  "description": "Result of the test case."
+                },
+                "platforms": {
+                  "type": "array",
+                  "description": "Platforms involved in the test case.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "commands": {
+                  "type": "array",
+                  "description": "Commands used in the test case.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "guidelines": {
+                  "type": "array",
+                  "description": "Guidelines for the test case execution.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "source_of_requirement": {
+                  "type": "string",
+                  "description": "Source of the requirement for this test case."
+                },
+                "scu_config_snippet": {
+                  "type": "object",
+                  "description": "SCU configuration snippet for the test case."
+                },
+                "date_release": {
+                  "type": "object",
+                  "description": "Date and release information for the test case.",
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "description": "Date of the test case."
+                    },
+                    "release": {
+                      "type": "string",
+                      "description": "Release version of the test case."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "hardware_components": {
+            "type": "object",
+            "description": "Hardware components involved in the section."
+          },
+          "software_release": {
+            "type": "object",
+            "description": "Software release information for the section."
+          },
+          "router_tester": {
+            "type": "object",
+            "description": "Router tester details for the section.",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "description": "Tool used for router testing."
+              },
+              "ports_used": {
+                "type": "integer",
+                "description": "Number of ports used for testing."
+              },
+              "connections": {
+                "type": "array",
+                "description": "Connections used for testing.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "port": {
+                      "type": "string",
+                      "description": "Port used for the connection."
+                    },
+                    "device": {
+                      "type": "string",
+                      "description": "Device used for the connection."
+                    },
+                    "hostname": {
+                      "type": "string",
+                      "description": "Hostname of the device."
+                    },
+                    "interface": {
+                      "type": "string",
+                      "description": "Interface used for the connection."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "traffic_legos": {
+            "type": "array",
+            "description": "Traffic legos used in the section.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "configuration_details": {
+            "type": "array",
+            "description": "Configuration details for the section.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "new_configurations": {
+            "type": "array",
+            "description": "New configurations introduced in the section.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scale": {
+            "type": "object",
+            "description": "Scale details for the section."
+          },
+          "overview": {
+            "type": "string",
+            "description": "Overview of the section."
+          },
+          "tables": {
+            "type": "array",
+            "description": "Tables included in the section.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Title of the table."
+                },
+                "headers": {
+                  "type": "array",
+                  "description": "Headers of the table.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "rows": {
+                  "type": "array",
+                  "description": "Rows of the table.",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "cli_output": {
+            "type": "array",
+            "description": "CLI output included in the section.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "config_snippets": {
+            "type": "array",
+            "description": "Configuration snippets included in the section.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "images": {
+            "type": "array",
+            "description": "Images included in the section.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "filename": {
+                  "type": "string",
+                  "description": "Filename of the image."
+                },
+                "caption": {
+                  "type": "string",
+                  "description": "Caption of the image."
+                },
+                "ocr_text": {
+                  "type": "string",
+                  "description": "OCR text extracted from the image."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
