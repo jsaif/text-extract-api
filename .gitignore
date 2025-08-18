@@ -9,6 +9,19 @@ storage/*
 client_secret*.json    
 .env.localhost
 .idea
+
+# Sensitive company files - prevent accidental commits
+*testplan*
+*TestPlan*
+*TESTPLAN*
+Extended_TestPlan_*.json
+convert_testplan.*
+validate_testplan_json.py
+requirements-testplan.txt
+*_internal.*
+*_company.*
+*_confidential.*
+
 # Python good practice ignore
 *.egg-info/
 /build/
